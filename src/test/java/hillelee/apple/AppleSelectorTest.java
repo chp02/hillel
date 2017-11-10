@@ -22,6 +22,9 @@ public class AppleSelectorTest {
         new Apple("RED", 56),
         new Apple("GREEN", 87),
         new Apple("RED", 23));
+    
+    Integer weightToFilter = 50;
+    String colorToFilter = "GREEN";
 
     @Test
     public void selectHeaviest() throws Exception {
@@ -60,39 +63,37 @@ public class AppleSelectorTest {
         Integer salary = nameToSalary.getOrDefault("Stepan", 0);
     }
 
-    @Test
-    public void filterByPredicateColor() throws Exception {
-        List<Apple> filtered = AppleSelector.filter(apples, new ColorPredicate());
-        assertThat(filtered, hasSize(2));
-    }
-    
-    @Test
-    public void filterByPredicateWeight() throws Exception {
-        List<Apple> filtered = AppleSelector.filter(apples, new WeightPredicate());
-        assertThat(filtered, hasSize(3));
-    }
-
-    @Test
-    public void filterByAnonymousPredicate() throws Exception {
-        List<Apple> filtered = AppleSelector.filter(apples, new ApplePredicate() {
-            @Override
-            public Boolean test(Apple apple) {
-                return apple.getWeight() > 56;
-            }
-        });
-    }
+//    @Test
+//    public void filterByPredicateColor() throws Exception {
+//        List<Apple> filtered = AppleSelector.filter(apples, new ColorPredicate());
+//        assertThat(filtered, hasSize(2));
+//    }
+//
+//    @Test
+//    public void filterByPredicateWeight() throws Exception {
+//        List<Apple> filtered = AppleSelector.filter(apples, new WeightPredicate());
+//        assertThat(filtered, hasSize(3));
+//    }
+//
+//    @Test
+//    public void filterByAnonymousPredicate() throws Exception {
+//        List<Apple> filtered = AppleSelector.filter(apples, new ApplePredicate() {
+//            @Override
+//            public Boolean test(Apple apple) {
+//                return apple.getWeight() > 56;
+//            }
+//        });
+//    }
     
     @Test
     public void filterByLambdaPredicateColor() throws Exception {
-        String color = "GREEN";
-        List<Apple> filtered = AppleSelector.filter(apples, apple -> apple.getColor().equals(color));
+        List<Apple> filtered = AppleSelector.filter(apples, apple -> apple.getColor().equals(colorToFilter));
         assertThat(filtered, hasSize(2));
     }
     
     @Test
     public void filterByLambdaPredicateWeight() throws Exception {
-        Integer weight = 50;
-        List<Apple> filtered = AppleSelector.filter(apples, apple -> apple.getWeight() > weight);
+        List<Apple> filtered = AppleSelector.filter(apples, apple -> apple.getWeight() > weightToFilter);
         assertThat(filtered, hasSize(3));
     }
 
