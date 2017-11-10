@@ -1,7 +1,5 @@
 package hillelee.apple;
 
-import hillelee.App;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -60,5 +58,11 @@ interface ApplePredicate {
 class ColorPredicate implements ApplePredicate {
     public Boolean test(Apple apple) {
         return apple.getColor().equals("GREEN");
+    }
+}
+
+class WeightPredicate implements ApplePredicate {
+    public Boolean test(Apple apple) {
+        return apple.getWeight() > 50;
     }
 }
