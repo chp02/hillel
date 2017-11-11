@@ -50,11 +50,11 @@ public class AppleSelector {
 //        return result;
 //    }
   
-  public static List<Apple> filter(List<Apple> apples, Predicate<Apple> predicate) {
-    List<Apple> result = new ArrayList<>();
-    for (Apple apple : apples) {
-      if (predicate.test(apple)) {
-        result.add(apple);
+  public static <T> List<T> filter(List<T> items, Predicate<T> predicate) {
+    List<T> result = new ArrayList<>();
+    for (T item : items) {
+      if (predicate.test(item)) {
+        result.add(item);
       }
     }
     return result;
