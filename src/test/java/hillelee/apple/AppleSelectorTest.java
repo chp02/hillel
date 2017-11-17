@@ -174,6 +174,7 @@ public class AppleSelectorTest {
     public void weightToApple() throws Exception {
         Map<Integer, Apple> weightToApple = apples.stream()
                 .collect(Collectors.toMap(Apple::getWeight, Function.identity()));
+        System.out.println(weightToApple);
         assertThat(weightToApple.get(100), is(apples.get(0)));
     }
 
@@ -181,7 +182,7 @@ public class AppleSelectorTest {
     public void groupByColor() throws Exception {
         Map<String, List<Apple>> grouped = apples.stream()
                 .collect(Collectors.groupingBy(Apple::getColor, Collectors.toList()));
-        System.out.println(grouped.get("RED"));
+        System.out.println(grouped);
     }
 
     @Test
