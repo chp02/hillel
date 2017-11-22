@@ -10,14 +10,14 @@ import java.util.Random;
 @Component
 class GreetingProvider
 {
-  private String[] greetings = {
+  private static final String[] GREETINGS = {
       "hello world",
       "hola world",
       "bonjour world"
   };
   
   String getRandomGreeting() {
-    return greetings[new Random().nextInt(3)];
+    return GREETINGS[new Random().nextInt(3)];
   }
   
 }
