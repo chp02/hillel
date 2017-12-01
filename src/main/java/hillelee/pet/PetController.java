@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 /**
@@ -42,12 +44,9 @@ public class PetController {
     @GetMapping("/pets")
     public List<Pet> getPets(@RequestParam Optional<String> specie,
                              @RequestParam Optional<Integer> age) {
-        Predicate<Pet> specieFilter = specie.map(this::filterBySpecie)
-                .orElse(pet -> true);
-        Predicate<Pet> ageFilter = age.map(this::filterByAge)
-                .orElse(pet -> true);
+        Predicate<Pet> specieFilter = specie.map(this::filterBySpecie).orElse(pet -> true);
+        Predicate<Pet> ageFilter = age.map(this::filterByAge).orElse(pet -> true);
         Predicate<Pet> complexFilter = ageFilter.and(specieFilter);
-
         return pets.values().stream()
                 .filter((complexFilter))
                 .collect(Collectors.toList());
