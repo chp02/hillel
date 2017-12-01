@@ -8,10 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -25,8 +22,6 @@ public class PetController {
 //        add(new Pet("Tom", "Cat", 3));
 //        add(new Pet("Jerry", "Mouse", 1));
 //    }};
-
-    private Integer counter = 1;
 
     private Map<Integer, Pet> pets = new HashMap<Integer, Pet>() {{
         put(0, new Pet("Tom", "Cat", 3));
@@ -71,8 +66,9 @@ public class PetController {
 
     @PostMapping("/pets")
     public ResponseEntity<Void> createPet(@RequestBody Pet pet) {
-        pets.put(++counter, pet);
-        return ResponseEntity.created(URI.create("/pets/" + counter)).build();
+        Integer id = generateId();
+        pets.put(id, pet);
+        return ResponseEntity.created(URI.create("/pets/" + id)).build();
     }
 
     @PutMapping("/pets/{id}")
@@ -87,6 +83,10 @@ public class PetController {
             throw new NoSuchPetException();
         }
         pets.remove(id.intValue());
+    }
+
+    private Integer generateId() {
+        return new Random().nextInt(100000);
     }
 
 }

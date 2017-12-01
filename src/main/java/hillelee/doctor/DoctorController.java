@@ -1,7 +1,5 @@
 package hillelee.doctor;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,35 +50,39 @@ public class DoctorController
   
   @PostMapping("/doctors")
   public ResponseEntity<?> createDoctor(@RequestBody Doctor doctor) {
-    if (doctors.containsKey(doctor.getId()))
-    {
-      return ResponseEntity
-          .status(HttpStatus.CONFLICT)
-          .body("doctor with ID " + doctor.getId() + " already exists");
-    }
-    if (doctor.getId() == null) {
-      doctor.setId(generateId());
-    }
+    if (doctor.getId() == null) doctor.setId(generateId());
+    if (doctors.containsKey(doctor.getId())) return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body("doctor with ID " + doctor.getId() + " already exists");
+    addDoctor(doctor);
     return ResponseEntity.created(URI.create("/doctors/" + doctor.getId())).build();
   }
-  
+
+  @PutMapping("/doctors/{id}")
+  public ResponseEntity<?> updateDoctor(@PathVariable Integer id, @RequestBody Doctor doctor) {
+    if (!doctors.containsKey(id)) {
+      return ResponseEntity.notFound().build();
+    }
+    if (!Objects.equals(doctor.getId(), doctors.get(id).getId())) {
+      return ResponseEntity.badRequest().body("change ID is not permitted");
+    }
+    addDoctor(doctor);
+    return ResponseEntity.noContent().build();
+  }
+
+  @DeleteMapping("/doctors/{id}")
+  public ResponseEntity<?> deleteDoctor(@PathVariable Integer id) {
+    if (!doctors.containsKey(id)) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.noContent().build();
+  }
+
   private void addDoctor(Doctor doctor) {
     doctors.put(doctor.getId(), doctor);
   }
   
   private Integer generateId() {
     return new Random().nextInt(100000);
-  }
-  
-//  private boolean isDoctorExisting(Integer id) {
-//
-//  }
-  
-  @Data
-  @AllArgsConstructor
-  private class ErrorBody {
-    private String message;
-    private final Integer code;
   }
   
 }
