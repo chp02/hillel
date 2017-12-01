@@ -28,10 +28,7 @@ public class DoctorController
   
   @GetMapping("/doctors/{id}")
   public ResponseEntity<?> getDoctorById(@PathVariable Integer id) {
-    if (!doctors.containsKey(id)) {
-      return ResponseEntity.notFound().build();
-    }
-    return ResponseEntity.ok(doctors.get(id));
+    return doctors.containsKey(id) ? ResponseEntity.ok(doctors.get(id)) : ResponseEntity.notFound().build();
   }
   
   @GetMapping("/doctors")
@@ -74,6 +71,10 @@ public class DoctorController
   private Integer generateId() {
     return new Random().nextInt(100000);
   }
+  
+//  private boolean isDoctorExisting(Integer id) {
+//
+//  }
   
   @Data
   @AllArgsConstructor
