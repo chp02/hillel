@@ -13,10 +13,10 @@ public class DoctorRepository {
   private Map<Integer, Doctor> doctors = new HashMap<>();
   
   {
-    addDoctor(new Doctor(generateId(), "Komarovsky", "surgeon"));
-    addDoctor(new Doctor(generateId(), "Shutko", "surgeon"));
-    addDoctor(new Doctor(generateId(), "Malahov", "dentist"));
-    addDoctor(new Doctor(generateId(), "Stupka", "neurologist"));
+    createDoctor(new Doctor(generateId(), "Komarovsky", "surgeon"));
+    createDoctor(new Doctor(generateId(), "Shutko", "surgeon"));
+    createDoctor(new Doctor(generateId(), "Malahov", "dentist"));
+    createDoctor(new Doctor(generateId(), "Stupka", "neurologist"));
   }
   
   public Map<Integer, Doctor> getDoctors() {
@@ -27,10 +27,16 @@ public class DoctorRepository {
     return Optional.ofNullable(doctors.get(id));
   }
   
-  public Optional<Doctor> addDoctor(Doctor doctor) {
+  public Optional<Doctor> createDoctor(Doctor doctor) {
     if (doctor.getId() == null) doctor.setId(generateId());
     if (doctors.containsKey(doctor.getId())) return Optional.empty();
     doctors.put(doctor.getId(), doctor);
+    return Optional.of(doctor);
+  }
+  
+  public Optional<Doctor> updateDoctor(Integer id, Doctor doctor) {
+    if (!doctors.containsKey(id)) return Optional.empty();
+    doctors.put(id, doctor);
     return Optional.of(doctor);
   }
   
@@ -39,7 +45,7 @@ public class DoctorRepository {
     return Optional.ofNullable(doctors.remove(id));
   }
   
-  public Integer generateId() {
+  private Integer generateId() {
     return new Random().nextInt(100000);
   }
   

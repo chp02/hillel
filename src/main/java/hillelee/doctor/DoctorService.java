@@ -1,15 +1,16 @@
 package hillelee.doctor;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class DoctorService {
   
   private DoctorRepository doctorRepository;
@@ -30,5 +31,23 @@ public class DoctorService {
   private Predicate<Doctor> filterBySpec(String specialization) {
     return doc -> doc.getSpecialization().equals(specialization);
   }
-
+  
+  public Optional<Doctor> getDoctorById(Integer id) {
+    return doctorRepository.getDoctorById(id);
+  }
+  
+  public Optional<Doctor> createDoctor(Doctor doctor) {
+    return doctorRepository.createDoctor(doctor);
+  }
+  
+  public Optional<Doctor> updateDoctor(Integer id, Doctor doctor) {
+    if (!Objects.equals(id, doctor.getId())) throw new IdModificationIsNotAllowed();
+    return doctorRepository.updateDoctor(id, doctor);
+  }
+  
+  public Optional<Doctor> deleteDoctor(Integer id)
+  {
+    return doctorRepository.deleteDoctor(id);
+  }
+  
 }
