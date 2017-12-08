@@ -1,9 +1,9 @@
 package hillelee;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,12 +11,9 @@ import java.util.List;
  */
 @Configuration
 @ConfigurationProperties("clinic-info")
+@Data
 public class Config {
   
-  private List<String> specialties = new ArrayList<>();
-  
-  public List<String> getSpecialties() {
-    return specialties;
-  }
+  private List<String> specialties;
   
 }
