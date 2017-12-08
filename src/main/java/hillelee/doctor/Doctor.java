@@ -12,6 +12,6 @@ public class Doctor
 {
   private Integer id;
   private String name;
-  private String specialization;
+  private String specialty;
   
 }

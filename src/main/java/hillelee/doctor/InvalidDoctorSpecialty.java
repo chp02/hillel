@@ -3,9 +3,9 @@ package hillelee.doctor;
 /**
  * Created by dmitriy.chebotarev@hpe.com on 12/7/2017.
  */
-class IdModificationIsNotAllowed extends RuntimeException {
+class InvalidDoctorSpecialty extends RuntimeException {
   
-  IdModificationIsNotAllowed(String message) {
+  InvalidDoctorSpecialty(String message) {
     super(message);
   }
   

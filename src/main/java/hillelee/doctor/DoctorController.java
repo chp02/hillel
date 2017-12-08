@@ -1,7 +1,7 @@
 package hillelee.doctor;
 
 import hillelee.Config;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,12 @@ import java.util.Optional;
  * Created by dmitriy.chebotarev@hpe.com on 11/27/2017.
  */
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DoctorController
 {
   
-  private Config config;
-  private DoctorService doctorService;
+  private final Config config;
+  private final DoctorService doctorService;
   
   @GetMapping("/doctors/{id}")
   public ResponseEntity<?> getDoctorById(@PathVariable Integer id) {

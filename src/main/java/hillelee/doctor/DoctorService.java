@@ -1,6 +1,7 @@
 package hillelee.doctor;
 
-import lombok.AllArgsConstructor;
+import hillelee.Config;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,10 +11,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DoctorService {
   
-  private DoctorRepository doctorRepository;
+  private final Config config;
+  private final DoctorRepository doctorRepository;
   
   public List<Doctor> getDoctors(Optional<String> name, Optional<String> specialization) {
     Predicate<Doctor> nameFilter = name.map(this::filterByName).orElse(doc -> true);
@@ -29,7 +31,7 @@ public class DoctorService {
   }
   
   private Predicate<Doctor> filterBySpec(String specialization) {
-    return doc -> doc.getSpecialization().equals(specialization);
+    return doc -> doc.getSpecialty().equals(specialization);
   }
   
   public Optional<Doctor> getDoctorById(Integer id) {
@@ -37,11 +39,13 @@ public class DoctorService {
   }
   
   public Optional<Doctor> createDoctor(Doctor doctor) {
+    validateSpecialty(doctor);
     return doctorRepository.createDoctor(doctor);
   }
   
   public Optional<Doctor> updateDoctor(Integer id, Doctor doctor) {
-    if (!Objects.equals(id, doctor.getId())) throw new IdModificationIsNotAllowed();
+    validateIdNotModified(id, doctor);
+    validateSpecialty(doctor);
     return doctorRepository.updateDoctor(id, doctor);
   }
   
@@ -49,5 +53,19 @@ public class DoctorService {
   {
     return doctorRepository.deleteDoctor(id);
   }
+  
+  private void validateSpecialty(Doctor doctor) {
+    if (!config.getSpecialties().contains(doctor.getSpecialty())) {
+      throw new InvalidDoctorSpecialty("Specialty '" + doctor.getSpecialty() +
+                                           "' is not allowed (use '/specialties' endpoint to check allowed list)");
+    }
+  }
+  
+  private void validateIdNotModified(Integer id, Doctor doctor) {
+    if (!Objects.equals(id, doctor.getId())) {
+      throw new IdModificationIsNotAllowed("Existing doctor ID modification is not allowed");
+    }
+  }
+  
   
 }

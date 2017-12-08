@@ -2,21 +2,21 @@ package hillelee.doctor;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class DoctorRepository {
   
-  private Map<Integer, Doctor> doctors = new HashMap<>();
+  private Map<Integer, Doctor> doctors = new ConcurrentHashMap<>();
   
   {
-    createDoctor(new Doctor(generateId(), "Komarovsky", "surgeon"));
-    createDoctor(new Doctor(generateId(), "Shutko", "surgeon"));
-    createDoctor(new Doctor(generateId(), "Malahov", "dentist"));
-    createDoctor(new Doctor(generateId(), "Stupka", "neurologist"));
+    createDoctor(new Doctor(generateId(), "Komarovsky", "urology"));
+    createDoctor(new Doctor(generateId(), "Shutko", "surgery"));
+    createDoctor(new Doctor(generateId(), "Malahov", "cardiology"));
+    createDoctor(new Doctor(generateId(), "Stupka", "surgery"));
   }
   
   public Map<Integer, Doctor> getDoctors() {

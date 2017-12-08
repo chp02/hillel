@@ -10,7 +10,7 @@ import java.util.List;
  * Created by dmitriy.chebotarev@hpe.com on 12/7/2017.
  */
 @Configuration
-@ConfigurationProperties(prefix="clinic-info")
+@ConfigurationProperties("clinic-info")
 public class Config {
   
   private List<String> specialties = new ArrayList<>();
