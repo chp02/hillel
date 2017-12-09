@@ -21,7 +21,7 @@ public class PetController {
     @GetMapping("/pets")
     public List<Pet> getPets(@RequestParam Optional<String> specie,
                              @RequestParam Optional<Integer> age) {
-        return petService.getPets(specie, age);
+        return petService.getPetsUsingSingleMethod(specie, age);
     }
 
     @GetMapping("/pets/{id}")

@@ -1,6 +1,7 @@
 package hillelee.pet;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationAdvisor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +18,26 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PetService {
 
-    private final PetRepository petRepository;
+    private final JpaPetRepository petRepository;
 
-    public List<Pet> getPets(Optional<String> specie, Optional<Integer> age) {
+    public List<Pet> getPetsUsingSeparateJpaMethod(Optional<String> specie, Optional<Integer> age) {
+        if (specie.isPresent() && age.isPresent()) {
+            petRepository.findBySpecieAndAge(specie.get(), age.get());
+        }
+        if (specie.isPresent()) {
+            return petRepository.findBySpecie(specie.get());
+        }
+        if (age.isPresent()) {
+            return petRepository.findByAge(age.get());
+        }
+        return petRepository.findAll();
+    }
+
+    public List<Pet> getPetsUsingSingleMethod(Optional<String> specie, Optional<Integer> age) {
+        return petRepository.findNullableBySpecieAndAge(specie.orElse(null), age.orElse(null));
+    }
+
+    public List<Pet> getPetsUsingStreamFilters(Optional<String> specie, Optional<Integer> age) {
         Predicate<Pet> specieFilter = specie.map(this::filterBySpecie).orElse(pet -> true);
         Predicate<Pet> ageFilter = age.map(this::filterByAge).orElse(pet -> true);
         Predicate<Pet> complexFilter = ageFilter.and(specieFilter);
@@ -45,7 +63,9 @@ public class PetService {
     }
 
     public Optional<Pet> delete(Integer id) {
-        return petRepository.delete(id);
+        Optional<Pet> mayBePet = petRepository.findById(id);
+        mayBePet.ifPresent(pet -> petRepository.delete(pet.getId()));
+        return mayBePet;
     }
 
 }
