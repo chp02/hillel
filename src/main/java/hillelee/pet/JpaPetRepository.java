@@ -4,14 +4,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * Created by JavaEE on 12/9/2017.
  */
-public interface JpaPetRepository extends JpaRepository<Pet,Integer> {
+public interface JpaPetRepository extends JpaRepository<Pet, Integer> {
 
     Optional<Pet> findById(Integer id);
 

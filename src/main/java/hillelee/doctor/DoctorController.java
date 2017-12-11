@@ -2,11 +2,9 @@ package hillelee.doctor;
 
 import hillelee.Config;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,25 +29,25 @@ public class DoctorController
   
   @GetMapping("/doctors")
   public List<Doctor> getDoctors(@RequestParam Optional<String> name,
-                           @RequestParam Optional<String> specialization) {
-    return doctorService.getDoctors(name, specialization);
+                           @RequestParam Optional<String> specialty) {
+    return doctorService.getDoctors(name, specialty);
   }
   
-  @PostMapping("/doctors")
-  public ResponseEntity<?> createDoctor(@RequestBody Doctor doctor) {
-    Optional<Doctor> created = doctorService.createDoctor(doctor);
-    return created.isPresent() ?
-        ResponseEntity.created(URI.create("/doctors/" + created.get().getId())).build() :
-        ResponseEntity.status(HttpStatus.CONFLICT).body("doctor with ID " + doctor.getId() + " already exists");
-  }
-
-  @PutMapping("/doctors/{id}")
-  public ResponseEntity<?> updateDoctor(@PathVariable Integer id, @RequestBody Doctor doctor) {
-    Optional<Doctor> updated = doctorService.updateDoctor(id, doctor);
-    return updated.isPresent() ?
-        ResponseEntity.ok(updated.get()) :
-        ResponseEntity.notFound().build();
-  }
+//  @PostMapping("/doctors")
+//  public ResponseEntity<?> createDoctor(@RequestBody Doctor doctor) {
+//    Optional<Doctor> created = doctorService.createDoctor(doctor);
+//    return created.isPresent() ?
+//        ResponseEntity.created(URI.create("/doctors/" + created.get().getId())).build() :
+//        ResponseEntity.status(HttpStatus.CONFLICT).body("doctor with ID " + doctor.getId() + " already exists");
+//  }
+//
+//  @PutMapping("/doctors/{id}")
+//  public ResponseEntity<?> updateDoctor(@PathVariable Integer id, @RequestBody Doctor doctor) {
+//    Optional<Doctor> updated = doctorService.updateDoctor(id, doctor);
+//    return updated.isPresent() ?
+//        ResponseEntity.ok(updated.get()) :
+//        ResponseEntity.notFound().build();
+//  }
 
   @DeleteMapping("/doctors/{id}")
   public ResponseEntity<?> deleteDoctor(@PathVariable Integer id)
