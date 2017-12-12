@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,31 +13,13 @@ public class DoctorService {
   
   private final Config config;
   private final JpaDoctorRepository doctorRepository;
-  //private final DoctorRepository doctorRepository;
   
-//  public List<Doctor> getDoctors(Optional<String> name, Optional<String> specialization) {
-//    Predicate<Doctor> nameFilter = name.map(this::filterByName).orElse(doc -> true);
-//    Predicate<Doctor> specFilter = specialization.map(this::filterBySpec).orElse(doc -> true);
-//    Predicate<Doctor> compositeFilter = nameFilter.and(specFilter);
-//    return doctorRepository.getDoctors().values().stream()
-//        .filter((compositeFilter))
-//        .collect(Collectors.toList());
-//  }
-  
-  public List<Doctor> getDoctors(Optional<String> name, Optional<String> specialty) {
-    return doctorRepository.findByNameAndSpecialty(name.orElse(null), specialty.orElse(null));
+  public List<Doctor> getDoctors(String name, String specialty) {
+    return doctorRepository.findByNameAndSpecialty(name, specialty);
   }
   
-//  private Predicate<Doctor> filterByName(String name) {
-//    return doc -> doc.getName().startsWith(name);
-//  }
-//
-//  private Predicate<Doctor> filterBySpec(String specialization) {
-//    return doc -> doc.getSpecialty().equals(specialization);
-//  }
-  
-  public Optional<Doctor> getDoctorById(Integer id) {
-    return doctorRepository.findById(id);
+  public Doctor getDoctorById(Integer id) {
+    return doctorRepository.findOne(id);
   }
   
   public Doctor createDoctor(Doctor doctor) {
@@ -52,11 +33,9 @@ public class DoctorService {
     return doctorRepository.save(doctor);
   }
   
-  public Optional<Doctor> deleteDoctor(Integer id)
+  public void deleteDoctor(Integer id)
   {
-    Optional<Doctor> mayBeDoctor = doctorRepository.findById(id);
-    mayBeDoctor.ifPresent(doctor -> doctorRepository.delete(doctor.getId()));
-    return mayBeDoctor;
+    doctorRepository.delete(id);
   }
   
   private void validateSpecialty(Doctor doctor) {
