@@ -3,7 +3,6 @@ package hillelee.doctor;
 import hillelee.Config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,15 +18,13 @@ public class DoctorController
   private final DoctorService doctorService;
   
   @GetMapping("/doctors/{id}")
-  public ResponseEntity<?> getDoctorById(@PathVariable Integer id) {
-    Doctor doctor = doctorService.getDoctorById(id);
-    if (doctor == null) return ResponseEntity.notFound().build();
-    return ResponseEntity.ok(doctor);
+  public Doctor getDoctorById(@PathVariable Integer id) {
+    return doctorService.getDoctorById(id);
   }
   
   @GetMapping("/doctors")
   public List<Doctor> getDoctors(@RequestParam(required = false) String name,
-                                 @RequestParam(required = false) String specialty) {
+                                 @RequestParam(required = false) List<String> specialty) {
     return doctorService.getDoctors(name, specialty);
   }
   
@@ -44,8 +41,7 @@ public class DoctorController
 
   @DeleteMapping("/doctors/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteDoctor(@PathVariable Integer id)
-  {
+  public void deleteDoctor(@PathVariable Integer id) {
     doctorService.deleteDoctor(id);
   }
   
