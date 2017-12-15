@@ -1,6 +1,6 @@
 package hillelee.doctor;
 
-import hillelee.Config;
+import hillelee.HilleleeConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DoctorController
 {
-  private final Config config;
+  private final HilleleeConfig config;
   private final DoctorService doctorService;
   
   @GetMapping("/doctors/{id}")

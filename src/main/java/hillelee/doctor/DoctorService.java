@@ -1,6 +1,10 @@
 package hillelee.doctor;
 
-import hillelee.Config;
+import hillelee.HilleleeConfig;
+import hillelee.doctor.exceptions.DoctorAlreadyExistsException;
+import hillelee.doctor.exceptions.DoctorNotFoundException;
+import hillelee.doctor.exceptions.IdModificationIsNotAllowedException;
+import hillelee.doctor.exceptions.InvalidDoctorSpecialtyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +15,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class DoctorService {
   
-  private final Config config;
+  private final HilleleeConfig config;
   private final JpaDoctorRepository doctorRepository;
   
   public List<Doctor> getDoctors(String name, List<String> specialty) {
