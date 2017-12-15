@@ -25,7 +25,7 @@ public class Pet {
     private String specie;
     private Integer age;
 
-   public Pet(String name, String specie,Integer age) {
+   public Pet(String name, String specie, Integer age) {
        this.name = name;
        this.specie = specie;
        this.age = age;

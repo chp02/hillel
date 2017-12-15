@@ -1,69 +1,72 @@
 package hillelee.doctor;
 
-import hillelee.Config;
+import hillelee.HilleleeConfig;
+import hillelee.doctor.exceptions.DoctorAlreadyExistsException;
+import hillelee.doctor.exceptions.DoctorNotFoundException;
+import hillelee.doctor.exceptions.IdModificationIsNotAllowedException;
+import hillelee.doctor.exceptions.InvalidDoctorSpecialtyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class DoctorService {
   
-  private final Config config;
-  private final DoctorRepository doctorRepository;
+  private final HilleleeConfig config;
+  private final JpaDoctorRepository doctorRepository;
   
-  public List<Doctor> getDoctors(Optional<String> name, Optional<String> specialization) {
-    Predicate<Doctor> nameFilter = name.map(this::filterByName).orElse(doc -> true);
-    Predicate<Doctor> specFilter = specialization.map(this::filterBySpec).orElse(doc -> true);
-    Predicate<Doctor> compositeFilter = nameFilter.and(specFilter);
-    return doctorRepository.getDoctors().values().stream()
-        .filter((compositeFilter))
-        .collect(Collectors.toList());
+  public List<Doctor> getDoctors(String name, List<String> specialty) {
+    if (name != null) name = name.toLowerCase();
+    return doctorRepository.findByNameAndSpecialty(name, specialty);
   }
   
-  private Predicate<Doctor> filterByName(String name) {
-    return doc -> doc.getName().startsWith(name);
+  public Doctor getDoctorById(Integer id) {
+    validateNotExists(id);
+    return doctorRepository.findOne(id);
   }
   
-  private Predicate<Doctor> filterBySpec(String specialization) {
-    return doc -> doc.getSpecialty().equals(specialization);
-  }
-  
-  public Optional<Doctor> getDoctorById(Integer id) {
-    return doctorRepository.getDoctorById(id);
-  }
-  
-  public Optional<Doctor> createDoctor(Doctor doctor) {
+  public Doctor createDoctor(Doctor doctor) {
+    validateAlreadyExists(doctor.getId());
     validateSpecialty(doctor);
-    return doctorRepository.createDoctor(doctor);
+    return doctorRepository.save(doctor);
   }
   
-  public Optional<Doctor> updateDoctor(Integer id, Doctor doctor) {
+  public Doctor updateDoctor(Integer id, Doctor doctor) {
+    validateNotExists(id);
     validateIdNotModified(id, doctor);
     validateSpecialty(doctor);
-    return doctorRepository.updateDoctor(id, doctor);
+    return doctorRepository.save(doctor);
   }
   
-  public Optional<Doctor> deleteDoctor(Integer id)
-  {
-    return doctorRepository.deleteDoctor(id);
+  public void deleteDoctor(Integer id) {
+    validateNotExists(id);
+    doctorRepository.delete(id);
   }
   
   private void validateSpecialty(Doctor doctor) {
     if (!config.getSpecialties().contains(doctor.getSpecialty())) {
-      throw new InvalidDoctorSpecialty("Specialty '" + doctor.getSpecialty() +
-                                           "' is not allowed (use '/specialties' endpoint to check allowed list)");
+      throw new InvalidDoctorSpecialtyException();
     }
   }
   
   private void validateIdNotModified(Integer id, Doctor doctor) {
     if (!Objects.equals(id, doctor.getId())) {
-      throw new IdModificationIsNotAllowed("Existing doctor ID modification is not allowed");
+      throw new IdModificationIsNotAllowedException();
+    }
+  }
+  
+  private void validateNotExists(Integer id) {
+    if (!doctorRepository.exists(id)) {
+      throw new DoctorNotFoundException();
+    }
+  }
+  
+  private void validateAlreadyExists(Integer id) {
+    if (doctorRepository.exists(id)) {
+      throw new DoctorAlreadyExistsException();
     }
   }
   
