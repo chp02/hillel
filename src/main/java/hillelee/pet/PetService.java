@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationAdvisor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,8 +34,15 @@ public class PetService {
         return petRepository.findAll();
     }
 
+    // just an example, can use
+    //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    //private List<Prescription> prescriptions;
+    @Transactional
     public List<Pet> getPetsUsingSingleMethod(Optional<String> specie, Optional<Integer> age) {
-        return petRepository.findNullableBySpecieAndAge(specie.orElse(null), age.orElse(null));
+        List<Pet> nulableBySpecieAndAge =
+                petRepository.findNullableBySpecieAndAge(specie.orElse(null), age.orElse(null));
+        nulableBySpecieAndAge.forEach(pet -> System.out.println(pet.getPrescriptions()));
+        return nulableBySpecieAndAge;
     }
 
     public List<Pet> getPetsUsingStreamFilters(Optional<String> specie, Optional<Integer> age) {

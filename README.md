@@ -16,6 +16,13 @@
     - move validations to DoctorService
     - merge configs
     - select doctor with name.startsWith()
+    - use fields from config without getters (get from spring env)
+    - use postgres LOWER
+    - remove global exception handler
+    - check HeadFirst Java
+    - drive.mindmap.com
+    - binkat subramanyam
+    - learn generics, joins
     
 # QUESTIONS
     - CommandLineRunner,  Default Constructor required

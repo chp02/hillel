@@ -2,15 +2,15 @@ package hillelee;
 
 import hillelee.doctor.Doctor;
 import hillelee.doctor.JpaDoctorRepository;
-import hillelee.pet.JpaPetRepository;
-import hillelee.pet.Pet;
-import hillelee.pet.PetService;
+import hillelee.pet.*;
 import lombok.Data;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,9 +31,19 @@ public class HilleleeConfig {
     @Bean
     CommandLineRunner initPets(JpaPetRepository repository) {
         return args -> {
+            List<Prescription> tomsPrescriptions = new ArrayList<>();
+            tomsPrescriptions.add(new Prescription("Paracetamol", LocalDate.now(), 3));
+            tomsPrescriptions.add(new Prescription("Briputron", LocalDate.now(), 2));
+
+            List<Prescription> jerrysPrescriptions = new ArrayList<>();
+            jerrysPrescriptions.add(new Prescription("Fortulit", LocalDate.now(), 4));
+            jerrysPrescriptions.add(new Prescription("Pekalin", LocalDate.now(), 3));
+
             if (!repository.findAll().isEmpty()) return;
-            repository.save(new Pet("Tom", "Cat", 3));
-            repository.save(new Pet("Jerry", "Mouse", 1));
+            MedicalCard medicalCardTom = new MedicalCard(LocalDate.now(), "bububu");
+            repository.save(new Pet("Tom", "Cat", 3, LocalDate.now(), medicalCardTom, tomsPrescriptions));
+            MedicalCard medicalCardJerry = new MedicalCard(LocalDate.now(), "bebebe");
+            repository.save(new Pet("Jerry", "Mouse", 1, LocalDate.now(), medicalCardJerry, jerrysPrescriptions));
         };
     }
     
