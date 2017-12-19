@@ -1,4 +1,4 @@
-package hillelee;
+package hillelee.doctor;
 
 import hillelee.doctor.exceptions.DoctorAlreadyExistsException;
 import hillelee.doctor.exceptions.DoctorNotFoundException;
@@ -17,7 +17,7 @@ import static org.springframework.http.HttpStatus.*;
  * Created by dmitriy.chebotarev@hpe.com on 12/14/2017.
  */
 @ControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler
+public class DoctorExceptionHandler extends ResponseEntityExceptionHandler
 {
   @ExceptionHandler(value = InvalidDoctorSpecialtyException.class)
   protected ResponseEntity<Object> HandleInvalidSpecialty(RuntimeException ex, WebRequest request) {
