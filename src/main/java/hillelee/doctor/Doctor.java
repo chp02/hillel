@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by dmitriy.chebotarev@hpe.com on 11/27/2017.
@@ -22,11 +20,12 @@ public class Doctor
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private String name;
-  private String specialty;
+  @Convert(converter = StringListConverter.class)
+  private List<String> specialties;
   
-  public Doctor(String name, String specialty) {
+  public Doctor(String name, List<String> specialties) {
     this.name = name;
-    this.specialty = specialty;
+    this.specialties = specialties;
   }
   
 }

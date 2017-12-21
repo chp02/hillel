@@ -22,10 +22,15 @@ public class DoctorController
     return doctorService.getDoctorById(id);
   }
   
+  @GetMapping("/doctors/{id}/spec")
+  public List<String> getDoctorSpecialties(@PathVariable Integer id) {
+    return doctorService.getDoctorSpecialties(id);
+  }
+  
   @GetMapping("/doctors")
   public List<Doctor> getDoctors(@RequestParam(required = false) String name,
-                                 @RequestParam(required = false) List<String> specialty) {
-    return doctorService.getDoctors(name, specialty);
+                                 @RequestParam(required = false) List<String> specialties) {
+    return doctorService.getDoctors(name, specialties);
   }
   
   @PostMapping("/doctors")
