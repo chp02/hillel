@@ -20,7 +20,7 @@ public class Doctor
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private String name;
-  @Convert(converter = StringListConverter.class)
+  @ElementCollection(fetch = FetchType.EAGER)
   private List<String> specialties;
   
   public Doctor(String name, List<String> specialties) {

@@ -20,8 +20,8 @@ public class DoctorService {
   
   public List<Doctor> getDoctors(String name, List<String> specialties) {
     if (name != null) name = name.toLowerCase();
-    //return doctorRepository.findByNameAndSpecialty(name, specialties);
-    return doctorRepository.findAll();
+    return doctorRepository.findByNameAndSpecialty(name, specialties);
+    //return doctorRepository.findAll();
   }
   
   public Doctor getDoctorById(Integer id) {
@@ -30,7 +30,6 @@ public class DoctorService {
   }
   
   public List<String> getDoctorSpecialties(Integer id) {
-    //return doctorRepository.getSpecialties(id);
     return getDoctorById(id).getSpecialties();
   }
   
