@@ -10,15 +10,10 @@ import java.util.List;
  * Created by JavaEE on 12/9/2017.
  */
 public interface JpaDoctorRepository extends JpaRepository<Doctor, Integer> {
-
-//    @Query("SELECT doctor FROM Doctor AS doctor WHERE " +
-//            "(:name IS NULL OR LOWER(doctor.name) LIKE LOWER(concat(:name, '%'))) AND " +
-//            "(doctor.specialty = :specialty OR :specialty IS NULL)")
-//    List<Doctor> findByNameAndSpecialty(@Param("name") String name, @Param("specialty") String specialty);
     
-    @Query("SELECT doctor FROM Doctor AS doctor WHERE " +
-        "(LOWER(doctor.name) LIKE :name% OR :name IS NULL) AND " +
-        "(doctor.specialty IN :specialty OR :specialty IS NULL)")
-    List<Doctor> findByNameAndSpecialty(@Param("name") String name, @Param("specialty") List<String> specialty);
+    @Query("SELECT DISTINCT doctor FROM Doctor doctor JOIN doctor.specialties s WHERE " +
+        "(s IN :specialties OR :specialties IS NULL) AND " +
+        "(LOWER(doctor.name) LIKE LOWER(CONCAT(:name,'%')) OR :name IS NULL)")
+    List<Doctor> findByNameAndSpecialty(@Param("name") String name, @Param("specialties") List<String> specialties);
     
 }

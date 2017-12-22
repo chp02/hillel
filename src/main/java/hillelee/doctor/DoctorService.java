@@ -18,14 +18,18 @@ public class DoctorService {
   private final HilleleeConfig config;
   private final JpaDoctorRepository doctorRepository;
   
-  public List<Doctor> getDoctors(String name, List<String> specialty) {
-    if (name != null) name = name.toLowerCase();
-    return doctorRepository.findByNameAndSpecialty(name, specialty);
+  public List<Doctor> getDoctors(String name, List<String> specialties) {
+    return doctorRepository.findByNameAndSpecialty(name, specialties);
+    //return doctorRepository.findAll();
   }
   
   public Doctor getDoctorById(Integer id) {
     validateNotExists(id);
     return doctorRepository.findOne(id);
+  }
+  
+  public List<String> getDoctorSpecialties(Integer id) {
+    return getDoctorById(id).getSpecialties();
   }
   
   public Doctor createDoctor(Doctor doctor) {
@@ -47,7 +51,7 @@ public class DoctorService {
   }
   
   private void validateSpecialty(Doctor doctor) {
-    if (!config.getSpecialties().contains(doctor.getSpecialty())) {
+    if (!config.getSpecialties().containsAll(doctor.getSpecialties())) {
       throw new InvalidDoctorSpecialtyException();
     }
   }

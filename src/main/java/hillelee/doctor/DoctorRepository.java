@@ -12,12 +12,12 @@ public class DoctorRepository {
   
   private Map<Integer, Doctor> doctors = new ConcurrentHashMap<>();
   
-  {
-    createDoctor(new Doctor(generateId(), "Komarovsky", "urology"));
-    createDoctor(new Doctor(generateId(), "Shutko", "surgery"));
-    createDoctor(new Doctor(generateId(), "Malahov", "cardiology"));
-    createDoctor(new Doctor(generateId(), "Stupka", "surgery"));
-  }
+//  {
+//    createDoctor(new Doctor(generateId(), "Komarovsky", "urology"));
+//    createDoctor(new Doctor(generateId(), "Shutko", "surgery"));
+//    createDoctor(new Doctor(generateId(), "Malahov", "cardiology"));
+//    createDoctor(new Doctor(generateId(), "Stupka", "surgery"));
+//  }
   
   public Map<Integer, Doctor> getDoctors() {
     return doctors;
