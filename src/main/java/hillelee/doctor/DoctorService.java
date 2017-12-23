@@ -19,7 +19,7 @@ public class DoctorService {
   private final JpaDoctorRepository doctorRepository;
   
   public List<Doctor> getDoctors(String name, List<String> specialties) {
-    return doctorRepository.findByNameAndSpecialty(name, specialties);
+    return doctorRepository.findByNameAndSpecialty(name == null ? null : name.toLowerCase(), specialties);
     //return doctorRepository.findAll();
   }
   

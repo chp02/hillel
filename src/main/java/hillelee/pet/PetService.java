@@ -1,14 +1,13 @@
 package hillelee.pet;
 
+import hillelee.store.StoreService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.annotation.PersistenceExceptionTranslationAdvisor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -16,10 +15,12 @@ import java.util.stream.Collectors;
 /**
  * Created by JavaEE on 12/2/2017.
  */
+@Service
 @RequiredArgsConstructor
 public class PetService {
 
     private final JpaPetRepository petRepository;
+    private final StoreService storeService;
 
     public List<Pet> getPetsUsingSeparateJpaMethod(Optional<String> specie, Optional<Integer> age) {
         if (specie.isPresent() && age.isPresent()) {
@@ -74,6 +75,19 @@ public class PetService {
         Optional<Pet> mayBePet = petRepository.findById(id);
         mayBePet.ifPresent(pet -> petRepository.delete(pet.getId()));
         return mayBePet;
+    }
+
+    @Transactional
+    @Retryable(ObjectOptimisticLockingFailureException.class)
+    public void prescribe(Integer petId,
+                          String description,
+                          String medicineName,
+                          Integer quantity,
+                          Integer timesPerDay) {
+        Pet pet = petRepository.findById(petId).orElseThrow(RuntimeException::new);
+        pet.getPrescriptions().add(new Prescription(description, LocalDate.now(), timesPerDay));
+        petRepository.save(pet);
+        storeService.decrement(medicineName, quantity);
     }
 
 }

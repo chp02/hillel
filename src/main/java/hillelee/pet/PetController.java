@@ -1,6 +1,8 @@
 package hillelee.pet;
 
 import hillelee.ErrorBody;
+import hillelee.pet.dto.PrescriptionInputDto;
+import hillelee.store.NoSuchMedicineException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,5 +52,13 @@ public class PetController {
         petService.delete(id).orElseThrow(NoSuchPetException::new);
     }
 
+    @PostMapping("/pets/{id}/prescriptions")
+    public void prescribe(@PathVariable Integer id, @RequestBody PrescriptionInputDto dto) {
+        petService.prescribe(id, dto.getDescription(), dto.getMedicineName(), dto.getQuantity(), dto.getTimesPerDay());
+    }
+
+    @ExceptionHandler(NoSuchMedicineException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void noSuchMedicine(){}
 }
 

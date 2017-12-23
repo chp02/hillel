@@ -3,6 +3,8 @@ package hillelee;
 import hillelee.doctor.Doctor;
 import hillelee.doctor.JpaDoctorRepository;
 import hillelee.pet.*;
+import hillelee.store.Medicine;
+import hillelee.store.MedicineRepository;
 import lombok.Data;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -22,11 +24,6 @@ import java.util.List;
 public class HilleleeConfig {
     
     private List<String> specialties;
-    
-    @Bean
-    PetService petService(JpaPetRepository petRepository) {
-        return new PetService(petRepository);
-    }
 
     @Bean
     CommandLineRunner initPets(JpaPetRepository repository) {
@@ -69,7 +66,12 @@ public class HilleleeConfig {
             repository.save(new Doctor("Stupka", spec1));
         };
     }
-    
-    
+
+    @Bean
+    CommandLineRunner initMedicineStore(MedicineRepository repository) {
+        return args -> {
+            repository.save(new Medicine("Brilliant green", 1));
+        };
+    }
 
 }
