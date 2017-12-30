@@ -39,9 +39,13 @@ public class PetService {
     //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     //private List<Prescription> prescriptions;
     @Transactional
-    public List<Pet> getPetsUsingSingleMethod(Optional<String> specie, Optional<Integer> age) {
+    public List<Pet> getPetsUsingSingleMethod(Optional<String> specie,
+                                              Optional<Integer> age,
+                                              Optional<LocalDate> birthDate) {
         List<Pet> nulableBySpecieAndAge =
-                petRepository.findNullableBySpecieAndAge(specie.orElse(null), age.orElse(null));
+                petRepository.findNullableBySpecieAndAge(specie.orElse(null),
+                        age.orElse(null),
+                        birthDate.orElse(null));
         nulableBySpecieAndAge.forEach(pet -> System.out.println(pet.getPrescriptions()));
         return nulableBySpecieAndAge;
     }
@@ -85,7 +89,7 @@ public class PetService {
                           Integer quantity,
                           Integer timesPerDay) {
         Pet pet = petRepository.findById(petId).orElseThrow(RuntimeException::new);
-        pet.getPrescriptions().add(new Prescription(description, LocalDate.now(), timesPerDay));
+        pet.getPrescriptions().add(new Prescription(description, LocalDate.now(), timesPerDay, MedicineType.PERORAL));
         petRepository.save(pet);
         storeService.decrement(medicineName, quantity);
     }

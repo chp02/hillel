@@ -40,12 +40,6 @@ public class StoreService {
 
         log.warn("read version: " + medicine.getVersion());
 
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         medicine.setQuantity(medicine.getQuantity() - quantity);
         medicineRepository.save(medicine);
     }

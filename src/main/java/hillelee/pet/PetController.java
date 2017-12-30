@@ -4,11 +4,15 @@ import hillelee.ErrorBody;
 import hillelee.pet.dto.PrescriptionInputDto;
 import hillelee.store.NoSuchMedicineException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -22,8 +26,9 @@ public class PetController {
 
     @GetMapping("/pets")
     public List<Pet> getPets(@RequestParam Optional<String> specie,
-                             @RequestParam Optional<Integer> age) {
-        return petService.getPetsUsingSingleMethod(specie, age);
+                             @RequestParam Optional<Integer> age,
+                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> birthDate) {
+        return petService.getPetsUsingSingleMethod(specie, age, birthDate);
     }
 
     @GetMapping("/pets/{id}")
@@ -53,7 +58,7 @@ public class PetController {
     }
 
     @PostMapping("/pets/{id}/prescriptions")
-    public void prescribe(@PathVariable Integer id, @RequestBody PrescriptionInputDto dto) {
+    public void prescribe(@PathVariable Integer id, @RequestBody @Valid PrescriptionInputDto dto) {
         petService.prescribe(id, dto.getDescription(), dto.getMedicineName(), dto.getQuantity(), dto.getTimesPerDay());
     }
 

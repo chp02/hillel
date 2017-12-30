@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,15 +27,16 @@ public class HilleleeConfig {
     private List<String> specialties;
 
     @Bean
+    @Profile("prod")
     CommandLineRunner initPets(JpaPetRepository repository) {
         return args -> {
             List<Prescription> tomsPrescriptions = new ArrayList<>();
-            tomsPrescriptions.add(new Prescription("Paracetamol", LocalDate.now(), 3));
-            tomsPrescriptions.add(new Prescription("Briputron", LocalDate.now(), 2));
+            tomsPrescriptions.add(new Prescription("Paracetamol", LocalDate.now(), 3, MedicineType.PERORAL));
+            tomsPrescriptions.add(new Prescription("Briputron", LocalDate.now(), 2, MedicineType.PERORAL));
 
             List<Prescription> jerrysPrescriptions = new ArrayList<>();
-            jerrysPrescriptions.add(new Prescription("Fortulit", LocalDate.now(), 4));
-            jerrysPrescriptions.add(new Prescription("Pekalin", LocalDate.now(), 3));
+            jerrysPrescriptions.add(new Prescription("Fortulit", LocalDate.now(), 4, MedicineType.PERORAL));
+            jerrysPrescriptions.add(new Prescription("Pekalin", LocalDate.now(), 3, MedicineType.PERORAL));
 
             if (!repository.findAll().isEmpty()) return;
             MedicalCard medicalCardTom = new MedicalCard(LocalDate.now(), "bububu");
@@ -45,6 +47,7 @@ public class HilleleeConfig {
     }
     
     @Bean
+    @Profile("prod")
     CommandLineRunner initDoctors(JpaDoctorRepository repository) {
         return args -> {
             List<String> spec1 = new ArrayList<>();
@@ -68,9 +71,10 @@ public class HilleleeConfig {
     }
 
     @Bean
+    @Profile("prod")
     CommandLineRunner initMedicineStore(MedicineRepository repository) {
         return args -> {
-            repository.save(new Medicine("Brilliant green", 1));
+            repository.save(new Medicine("Brilliantus greenum", 100));
         };
     }
 

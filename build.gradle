@@ -24,6 +24,7 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('com.fasterxml.jackson.datatype:jackson-datatype-jdk8')
+	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr308')
 	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.hibernate:hibernate-java8')
@@ -32,4 +33,8 @@ dependencies {
 	runtime('org.postgresql:postgresql')
 	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+bootRun {
+	systemProperty 'spring.profiles.active', 'prod'
 }
